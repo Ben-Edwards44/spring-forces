@@ -1,3 +1,6 @@
+#Author: Ben-Edwards44
+
+
 import pygame
 import particle
 import spring
@@ -75,28 +78,30 @@ def draw():
     pygame.display.update()
 
 
-create_rope(5)
-#create_box(100)
+#Either call create_rope(num of particles) or create_box(length of sides)
+#e.g:
+create_box(100)
 
 
-p = None
-clock = pygame.time.Clock()
-while True:
-    clock.tick(60)
-    update()
-    draw()
+if __name__ == "__main":
+    p = None
+    clock = pygame.time.Clock()
+    while True:
+        clock.tick(60)
+        update()
+        draw()
 
-    if pygame.mouse.get_pressed(3)[0]:
-        if p != None:
-            p.velocity_x = 0
-            p.velocity_y = 0
-            p.x, p.y = pygame.mouse.get_pos()
+        if pygame.mouse.get_pressed(3)[0]:
+            if p != None:
+                p.velocity_x = 0
+                p.velocity_y = 0
+                p.x, p.y = pygame.mouse.get_pos()
+            else:
+                p = find_particles_range()
         else:
-            p = find_particles_range()
-    else:
-        p = None
+            p = None
 
-    for e in pygame.event.get():
-        if e.type == pygame.QUIT:
-            pygame.quit()
-            quit()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                quit()
