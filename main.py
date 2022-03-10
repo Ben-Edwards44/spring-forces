@@ -83,7 +83,7 @@ def draw():
 create_box(100)
 
 
-if __name__ == "__main":
+if __name__ == "__main__":
     p = None
     clock = pygame.time.Clock()
     while True:
