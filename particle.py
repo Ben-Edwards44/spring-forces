@@ -4,9 +4,7 @@
 import math
 
 
-G = 6.67408e-11
-M = 5.97219e22
-R = 6371000
+GRAV_FIELD_STRENGTH = 9.8
 
 
 class Particle:
@@ -19,10 +17,11 @@ class Particle:
         self.max_y = max_y
         self.velocity_x = 0
         self.velocity_y = 0
+        self.multiplier = 0.01
 
     def calc_grav_force(self):
         if not self.locked:
-            force = G * M * (self.mass / R**2)
+            force = GRAV_FIELD_STRENGTH * self.mass * self.multiplier
             self.apply_force(force, math.radians(90), True)
 
     def apply_force(self, force, theta, invert_y):
