@@ -24,28 +24,36 @@ window = pygame.display.set_mode(SCREEN_SIZE)
 def create_rope(n):
     spacing = (SCREEN_SIZE[1] - 100) // n
 
+    current_particles = []
     for i in range(n):
-        particles.append(particle.Particle(MASS, PARTICLE_SIZE, (SCREEN_SIZE[0] // 2, spacing * i), i == 0, SCREEN_SIZE[0], SCREEN_SIZE[1]))
+        current_particles.append(particle.Particle(MASS, PARTICLE_SIZE, (SCREEN_SIZE[0] // 2, spacing * i), i == 0, SCREEN_SIZE[0], SCREEN_SIZE[1]))
 
         if i > 0:
-            springs.append(spring.Spring(K, spacing // 2, particles[i - 1], particles[i]))
+            springs.append(spring.Spring(K, spacing // 2, current_particles[i - 1], current_particles[i]))
+
+    for i in current_particles:
+        particles.append(i)
 
 
 def create_box(length):
+    current_particles = []
     for i in range(-1, 2, 2):
-        particles.append(particle.Particle(MASS, PARTICLE_SIZE, (SCREEN_SIZE[0] // 2 - length // 2, SCREEN_SIZE[1] // 2 + i * length // 2), False, SCREEN_SIZE[0], SCREEN_SIZE[1]))
-        particles.append(particle.Particle(MASS, PARTICLE_SIZE, (SCREEN_SIZE[0] // 2 + length // 2, SCREEN_SIZE[1] // 2 + i * length // 2), False, SCREEN_SIZE[0], SCREEN_SIZE[1]))
+        current_particles.append(particle.Particle(MASS, PARTICLE_SIZE, (SCREEN_SIZE[0] // 2 - length // 2, SCREEN_SIZE[1] // 2 + i * length // 2), False, SCREEN_SIZE[0], SCREEN_SIZE[1]))
+        current_particles.append(particle.Particle(MASS, PARTICLE_SIZE, (SCREEN_SIZE[0] // 2 + length // 2, SCREEN_SIZE[1] // 2 + i * length // 2), False, SCREEN_SIZE[0], SCREEN_SIZE[1]))
+
+    for i in current_particles:
+        particles.append(i)
 
     for i in range(1, 4):
-        springs.append(spring.Spring(K, calculate_length(0, i), particles[0], particles[i]))
+        springs.append(spring.Spring(K, calculate_length(0, i, current_particles), current_particles[0], current_particles[i]))
 
         if 2 <= i <= 3:
-            springs.append(spring.Spring(K, calculate_length(1, i), particles[1], particles[i]))
+            springs.append(spring.Spring(K, calculate_length(1, i, current_particles), current_particles[1], current_particles[i]))
 
-    springs.append(spring.Spring(K, calculate_length(2, 3), particles[2], particles[3]))
+    springs.append(spring.Spring(K, calculate_length(2, 3, current_particles), current_particles[2], current_particles[3]))
 
 
-calculate_length = lambda a, b: math.sqrt((particles[a].x - particles[b].x)**2 + (particles[a].y - particles[b].y)**2)
+calculate_length = lambda a, b, current_particles: math.sqrt((current_particles[a].x - current_particles[b].x)**2 + (current_particles[a].y - current_particles[b].y)**2)
 
 
 def update():
